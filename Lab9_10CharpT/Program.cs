@@ -4,72 +4,72 @@ using System.Collections.Generic;
 
 class Song
 {
-    public string Назва { get; set; }
-    public string Виконавець { get; set; }
-    public double Тривалість { get; set; }
+    public string Title { get; set; }
+    public string Artist { get; set; }
+    public double Duration { get; set; }
 
-    public Song(string назва, string виконавець, double тривалість)
+    public Song(string title, string artist, double duration)
     {
-        Назва = назва;
-        Виконавець = виконавець;
-        Тривалість = тривалість;
+        Title = title;
+        Artist = artist;
+        Duration = duration;
     }
 
     public override string ToString()
     {
-        return $"{Назва} - {Виконавець} ({Тривалість} хв)";
+        return $"{Title} - {Artist} ({Duration} min)";
     }
 }
 
 class MusicDisk
 {
-    private Hashtable пісні = new Hashtable();
+    private Hashtable songs = new Hashtable();
 
-    public void AddSong(string назва, Song пісня)
+    public void AddSong(string title, Song song)
     {
-        пісні[назва] = пісня;
+        songs[title] = song;
     }
 
-    public void ВидалитиПісню(string назва)
+    public void RemoveSong(string title)
     {
-        пісні.Remove(назва);
+        songs.Remove(title);
     }
 
-    public void ПереглянутиВміст()
+    public void ViewContent()
     {
-        foreach (DictionaryEntry entry in пісні)
+        foreach (DictionaryEntry entry in songs)
         {
             Console.WriteLine(entry.Value);
         }
     }
 
-    public void ПереглянутиПісню(string назва)
+    public void ViewSong(string title)
     {
-        if (пісні.ContainsKey(назва))
+        if (songs.ContainsKey(title))
         {
-            Console.WriteLine(пісні[назва]);
+            Console.WriteLine(songs[title]);
         }
         else
         {
-            Console.WriteLine("Пісня не знайдена.");
+            Console.WriteLine("Song not found.");
         }
     }
 
-    public void ПошукВиконавця(string виконавець)
+    public void SearchArtist(string artist)
     {
-        bool знайдено = false;
-        foreach (DictionaryEntry entry in пісні)
+        bool found = false;
+        foreach (DictionaryEntry entry in songs)
         {
-            Song пісня = (Song)entry.Value;
-            if (пісня.Виконавець == виконавець)
+            Song song = (Song)entry.Value;
+            if (song.Artist == artist)
             {
-                Console.WriteLine(пісня);
-                знайдено = true;
+                Console.WriteLine(song);
+                found = true;
             }
         }
-        if (!знайдено)
+        if (!found)
         {
-            Console.WriteLine("Пісні виконавця не знайдено.");
+            Console.WriteLine("Songs of the artist not found.");
         }
     }
 }
@@ -78,16 +78,16 @@ class Program
 {
     static void Main()
     {
-        // Виконання першого завдання
+        // Execution of the first task
         ReverseLinesInFile();
 
-        // Виконання другого завдання
+        // Execution of the second task
         GroupNumbersFromFile();
 
-        // Виконання третього завдання
+        // Execution of the third task
         ArrayListManipulation();
 
-        // Виконання четвертого завдання
+        // Execution of the fourth task
         MusicCatalog();
     }
 
@@ -108,7 +108,7 @@ class Program
         }
         catch (Exception ex)
         {
-            Console.WriteLine("Помилка: " + ex.Message);
+            Console.WriteLine("Error: " + ex.Message);
         }
     }
 
@@ -176,7 +176,7 @@ class Program
         ArrayList originalList = new ArrayList() { 1, 2, 3, 4, 5 };
         ArrayList clonedList = (ArrayList)originalList.Clone();
 
-        // Додати елемент у початок списку
+        // Add an element to the beginning of the list
         originalList.Insert(0, 0);
 
         Console.WriteLine("Original list:");
@@ -198,34 +198,34 @@ class Program
     {
         Hashtable catalog = new Hashtable();
 
-        // Створення музичних дисків і додавання їх до каталогу
+        // Creating music disks and adding them to the catalog
         MusicDisk disk1 = new MusicDisk();
         disk1.AddSong("Song 1", new Song("Song 1", "Singer 1", 3.5));
         disk1.AddSong("Song 2", new Song("Song 2", "Singer 2", 4.0));
-        catalog["Диск 1"] = disk1;
+        catalog["Disk 1"] = disk1;
 
-        MusicDisk диск2 = new MusicDisk();
-        диск2.AddSong("Song 3", new Song("Song 3", "Singer 1", 3.8));
-        диск2.AddSong("Song 4", new Song("Song 4", "Singer 3", 4.2));
-        catalog["Диск 2"] = диск2;
+        MusicDisk disk2 = new MusicDisk();
+        disk2.AddSong("Song 3", new Song("Song 3", "Singer 1", 3.8));
+        disk2.AddSong("Song 4", new Song("Song 4", "Singer 3", 4.2));
+        catalog["Disk 2"] = disk2;
 
-        // Перегляд вмісту каталогу
+        // Viewing the content of the catalog
         Console.WriteLine("Music catalog:");
         foreach (DictionaryEntry entry in catalog)
         {
             Console.WriteLine($"Disk: {entry.Key}");
             MusicDisk disk = (MusicDisk)entry.Value;
-            disk.ПереглянутиВміст();
+            disk.ViewContent();
             Console.WriteLine();
         }
 
-        // Пошук пісень виконавця
-        string singer = "Singer 1";
-        Console.WriteLine($"search for a song of {singer}:");
+        // Searching for songs of an artist
+        string artist = "Singer 1";
+        Console.WriteLine($"Search for songs of {artist}:");
         foreach (DictionaryEntry entry in catalog)
         {
             MusicDisk disk = (MusicDisk)entry.Value;
-            disk.ПошукВиконавця(singer);
+            disk.SearchArtist(artist);
         }
     }
 }
