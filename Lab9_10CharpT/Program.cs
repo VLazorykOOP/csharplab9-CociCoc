@@ -1,6 +1,6 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 
 class Program
@@ -12,6 +12,9 @@ class Program
 
         // Виконання другого завдання
         GroupNumbersFromFile();
+
+        // Виконання третього завдання
+        ArrayListManipulation();
     }
 
     static void ReverseLinesInFile()
@@ -20,15 +23,13 @@ class Program
 
         try
         {
-            string[] lines = File.ReadAllLines(filePath);
+            ArrayList linesList = new ArrayList(File.ReadAllLines(filePath));
 
-            foreach (string line in lines)
+            foreach (string line in linesList)
             {
-                for (int i = line.Length - 1; i >= 0; i--)
-                {
-                    Console.Write(line[i]);
-                }
-                Console.WriteLine();
+                char[] charArray = line.ToCharArray();
+                Array.Reverse(charArray);
+                Console.WriteLine(new string(charArray));
             }
         }
         catch (Exception ex)
@@ -41,49 +42,81 @@ class Program
     {
         string filePath = "numbers.txt";
 
-        List<int> numbers = File.ReadAllLines(filePath)
-                                 .Select(int.Parse)
-                                 .ToList();
-
-        int a = 5;
-        int b = 10;
-
-        Stack<int> inRangeStack = new Stack<int>();
-        Stack<int> lessThanAStack = new Stack<int>();
-        Stack<int> greaterThanBStack = new Stack<int>();
-
-        foreach (int num in numbers)
+        try
         {
-            if (num >= a && num <= b)
+            ArrayList numbersList = new ArrayList();
+            foreach (string line in File.ReadLines(filePath))
             {
-                inRangeStack.Push(num);
+                numbersList.Add(int.Parse(line));
             }
-            else if (num < a)
+
+            int a = 5;
+            int b = 10;
+
+            ArrayList inRangeList = new ArrayList();
+            ArrayList lessThanAList = new ArrayList();
+            ArrayList greaterThanBList = new ArrayList();
+
+            foreach (int num in numbersList)
             {
-                lessThanAStack.Push(num);
+                if (num >= a && num <= b)
+                {
+                    inRangeList.Add(num);
+                }
+                else if (num < a)
+                {
+                    lessThanAList.Add(num);
+                }
+                else
+                {
+                    greaterThanBList.Add(num);
+                }
             }
-            else
+
+            Console.WriteLine("Numbers in the range [{0},{1}]:", a, b);
+            foreach (int num in inRangeList)
             {
-                greaterThanBStack.Push(num);
+                Console.WriteLine(num);
+            }
+
+            Console.WriteLine("Numbers less than {0}:", a);
+            foreach (int num in lessThanAList)
+            {
+                Console.WriteLine(num);
+            }
+
+            Console.WriteLine("Numbers greater than {0}:", b);
+            foreach (int num in greaterThanBList)
+            {
+                Console.WriteLine(num);
             }
         }
-
-        Console.WriteLine("Numbers in the range [{0},{1}]:", a, b);
-        while (inRangeStack.Count > 0)
+        catch (Exception ex)
         {
-            Console.WriteLine(inRangeStack.Pop());
+            Console.WriteLine("Помилка: " + ex.Message);
         }
+    }
 
-        Console.WriteLine("Numbers less than {0}:", a);
-        while (lessThanAStack.Count > 0)
-        {
-            Console.WriteLine(lessThanAStack.Pop());
-        }
+    static void ArrayListManipulation()
+    {
+        ArrayList originalList = new ArrayList() { 1, 2, 3, 4, 5 };
+        ArrayList clonedList = (ArrayList)originalList.Clone();
 
-        Console.WriteLine("Numbers greater than {0}:", b);
-        while (greaterThanBStack.Count > 0)
+        // Додати елемент у початок списку
+        originalList.Insert(0, 0);
+
+        Console.WriteLine("original list:");
+        foreach (var item in originalList)
         {
-            Console.WriteLine(greaterThanBStack.Pop());
+            Console.Write(item + " ");
         }
+        Console.WriteLine();
+
+        Console.WriteLine("clone list:");
+        foreach (var item in clonedList)
+        {
+            Console.Write(item + " ");
+        }
+        Console.WriteLine();
     }
 }
